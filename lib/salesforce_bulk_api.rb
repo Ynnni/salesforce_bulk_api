@@ -10,7 +10,6 @@ require 'salesforce_bulk_api/job'
 require 'salesforce_bulk_api/connection'
 
 module SalesforceBulkApi
-
   class Api
     attr_reader :connection
 
@@ -53,7 +52,6 @@ module SalesforceBulkApi
       }
     end
 
-
     ##
     # Allows you to attach a listener that accepts the created job (which has a useful #job_id field).  This is useful
     # for recording a job ID persistently before you begin batch work (i.e. start modifying the salesforce database),
@@ -74,7 +72,7 @@ module SalesforceBulkApi
 
       job.create_job(batch_size, send_nulls, no_null_list)
       @listeners[:job_created].each {|callback| callback.call(job)}
-      operation == "query" ? job.add_query() : job.add_batches()
+      operation == 'query' ? job.add_query : job.add_batches
       response = job.close_job
       response.merge!({'batches' => job.get_job_result(get_response, timeout)}) if get_response == true
       response

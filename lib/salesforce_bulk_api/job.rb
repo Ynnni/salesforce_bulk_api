@@ -1,22 +1,19 @@
 module SalesforceBulkApi
-
   class Job
     attr_reader :job_id
 
     class SalesforceException < StandardError; end
 
-    def initialize(operation: nil, sobject: nil, records: nil, external_field: nil, connection: nil, job_id: nil)
-      @job_id         = job_id
-      @operation      = operation
-      @sobject        = sobject
-      @external_field = external_field
-      @records        = records
-      @connection     = connection
+    def initialize(attrs = {})
+      @job_id         = attrs[:job_id]
+      @operation      = attrs[:operation]
+      @sobject        = attrs[:sobject]
+      @external_field = attrs[:external_field]
+      @records        = attrs[:records]
+      @connection     = attrs[:connection]
       @batch_ids      = []
       @XML_HEADER     = '<?xml version="1.0" encoding="utf-8" ?>'
     end
-
-
 
     def create_job(batch_size, send_nulls, no_null_list)
       @batch_size = batch_size
@@ -45,7 +42,7 @@ module SalesforceBulkApi
 
     end
 
-    def close_job()
+    def close_job
       xml = "#{@XML_HEADER}<jobInfo xmlns=\"http://www.force.com/2009/06/asyncapi/dataload\">"
       xml += "<state>Closed</state>"
       xml += "</jobInfo>"
